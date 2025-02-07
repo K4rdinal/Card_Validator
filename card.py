@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import messagebox
+import CardTyper
 import sys
 import re
 class Card :
@@ -14,7 +15,7 @@ class Card :
         self.root.Label_1 = Label(self.root,text="Welcome\nEnter your card ",font=("Arial",12,"bold"),background="gray")
         self.root.Label_1.pack(pady=10)
 
-        self.root.Text_1 = Text(self.root,width=16,height=1,relief=GROOVE)
+        self.root.Text_1 = Text(self.root,width=32,height=1,relief=GROOVE)
         self.root.Text_1.pack(pady=10)
 
         self.root.Button_1 = Button(self.root,text="Submit",font="bold",width=6,height=2,command= self.getCardID)
@@ -29,14 +30,14 @@ class Card :
         functions. If total can divide with 10 and remains 0
         it is a valid card 
         """
-        nums = self.root.Text_1.get("1.0",END).strip()
+        nums = "".join(self.root.Text_1.get("1.0",END).split())
         if not nums.isdigit():
             messagebox.showerror("Warning","Please enter digits")
             return
         self.getEvenNum(nums)
         self.getOddNum(nums)
 
-        cardtype = self.getCardType(nums)
+        cardtype = CardTyper.typer.getCardType(nums)
         evenNums = self.getEvenNum(nums)
         oddNums = self.getOddNum(nums)
         total = evenNums + oddNums
@@ -45,22 +46,6 @@ class Card :
             messagebox.showinfo("Valid","It is valid. "+cardtype)
         else:
             messagebox.showwarning("Warning","It is not valid.")
-
-    def getCardType(self,nums):
-        """
-        checks card's first number with regex module. Returns value
-        with if-else statement
-
-        """
-        match = re.search(r'^4',nums)
-        if match :
-            return "Card type is visa."
-        elif re.search(r'^5',nums):
-            return "Card type is master card"
-        elif re.search(r'^3',nums):
-            return "Card type is american express"
-        else :
-            return "Card type is unknown"
 
     def getEvenNum(self,nums):
         """
